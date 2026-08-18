@@ -95,25 +95,36 @@ grid.material.opacity = 0.14;
 scene.add(grid);
 
 // Nền sao 3D
-function createStars(count = 1800) {
+function createStars({
+  count = 1800,
+  color = 0x8bd8ff,
+  size = 0.08,
+  opacity = 0.78,
+  yMin = -20,
+  yMax = 45,
+  zMin = -55,
+  zMax = 20
+} = {}) {
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
 
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
     positions[i3] = THREE.MathUtils.randFloatSpread(90);
-    positions[i3 + 1] = THREE.MathUtils.randFloat(-20, 45);
-    positions[i3 + 2] = THREE.MathUtils.randFloat(-55, 20);
+    positions[i3 + 1] = THREE.MathUtils.randFloat(yMin, yMax);
+    positions[i3 + 2] = THREE.MathUtils.randFloat(zMin, zMax);
   }
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
   const material = new THREE.PointsMaterial({
-    color: 0x8bd8ff,
-    size: 0.08,
+    color,
+    size,
     sizeAttenuation: true,
     transparent: true,
-    opacity: 0.78
+    opacity,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
   });
 
   const stars = new THREE.Points(geometry, material);
@@ -121,7 +132,23 @@ function createStars(count = 1800) {
   return stars;
 }
 
-const stars = createStars();
+const stars = createStars({
+  count: 2600,
+  color: 0xb8e8ff,
+  size: 0.115,
+  opacity: 0.95
+});
+
+const farStars = createStars({
+  count: 1200,
+  color: 0x2f7dff,
+  size: 0.16,
+  opacity: 0.42,
+  yMin: -18,
+  yMax: 52,
+  zMin: -75,
+  zMax: -12
+});
 
 // Tạo geometry chữ 3D một lần rồi dùng lại
 const font = new FontLoader().parse(fontJson);
@@ -378,6 +405,8 @@ function animate(time) {
 
   stars.rotation.y += 0.006 * delta;
   stars.rotation.x = Math.sin(elapsed * 0.08) * 0.02;
+  farStars.rotation.y -= 0.003 * delta;
+  farStars.rotation.x = Math.sin(elapsed * 0.06) * 0.015;
 
   controls.update();
   composer.render();
