@@ -90,10 +90,10 @@ function getResponsiveSettings() {
   const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
 
   return {
-    maxObjects: isMobile ? 95 : MAX_FALLING_OBJECTS,
+    maxObjects: isMobile ? 135 : MAX_FALLING_OBJECTS,
     spawnBatch: isMobile ? 1 : SPAWN_BATCH,
-    initialObjects: isMobile ? 55 : INITIAL_TEXTS,
-    safeWidthFactor: isMobile ? 0.46 : SCREEN_SAFE_WIDTH_FACTOR,
+    initialObjects: isMobile ? 85 : INITIAL_TEXTS,
+    safeWidthFactor: isMobile ? 0.54 : SCREEN_SAFE_WIDTH_FACTOR,
     textScaleMin: isMobile ? 0.18 : 0.34,
     textScaleMax: isMobile ? 0.46 : 0.96,
     heartScaleMin: isMobile ? 0.34 : 0.7,
