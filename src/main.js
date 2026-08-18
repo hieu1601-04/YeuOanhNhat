@@ -8,9 +8,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import fontJson from 'three/examples/fonts/helvetiker_bold.typeface.json';
 import './style.css';
 
-// =========================
-// CẤU HÌNH DỄ CHỈNH
-// =========================
+
 const MESSAGE = 'I LOVE YOU';
 const SPAWN_EVERY_MS = 130;
 const SPAWN_BATCH = 2;
@@ -33,8 +31,8 @@ const music = document.querySelector('#bg-music');
 const musicToggle = document.querySelector('.music-toggle');
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x020716);
-scene.fog = new THREE.FogExp2(0x03112c, 0.023);
+scene.background = new THREE.Color(0x061226);
+scene.fog = new THREE.FogExp2(0x0a2138, 0.023);
 
 const camera = new THREE.PerspectiveCamera(
   58,
@@ -78,13 +76,13 @@ controls.maxDistance = 48;
 controls.target.set(0, 2, 0);
 
 // Ánh sáng
-scene.add(new THREE.HemisphereLight(0x8ed8ff, 0x020b24, 1.45));
+scene.add(new THREE.HemisphereLight(0xc3e8ff, 0x07142a, 1.45));
 
-const keyLight = new THREE.PointLight(0x1f8fff, 52, 42, 2);
+const keyLight = new THREE.PointLight(0x9fd7ff, 52, 42, 2);
 keyLight.position.set(4, 12, 8);
 scene.add(keyLight);
 
-const rimLight = new THREE.PointLight(0x005dff, 46, 38, 2);
+const rimLight = new THREE.PointLight(0x7dbfff, 46, 38, 2);
 rimLight.position.set(-8, 5, -10);
 scene.add(rimLight);
 
@@ -104,7 +102,7 @@ function getResponsiveSettings() {
 }
 
 // "Mặt sàn" rất nhẹ để tăng cảm giác chiều sâu
-const grid = new THREE.GridHelper(42, 42, 0x247cff, 0x09215c);
+const grid = new THREE.GridHelper(42, 42, 0x8fcfff, 0x183d63);
 grid.position.y = -10;
 grid.material.transparent = true;
 grid.material.opacity = 0.14;
@@ -150,16 +148,16 @@ function createStars({
 
 const stars = createStars({
   count: 2600,
-  color: 0xb8e8ff,
+  color: 0xd4f0ff,
   size: 0.115,
-  opacity: 0.95
+  opacity: 0.9
 });
 
 const farStars = createStars({
   count: 1200,
-  color: 0x2f7dff,
+  color: 0x8fc7ff,
   size: 0.16,
-  opacity: 0.42,
+  opacity: 0.38,
   yMin: -18,
   yMax: 52,
   zMin: -75,
@@ -199,11 +197,11 @@ const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
 heartGeometry.center();
 
 const palette = [
-  0x0f7bff,
-  0x1d9bff,
-  0x2f6fff,
-  0x004dff,
-  0x5bbcff
+  0x8fc7ff,
+  0xa9d9ff,
+  0xbde8ff,
+  0x74b9ff,
+  0xd2f2ff
 ];
 
 const fallingObjects = [];
