@@ -18,6 +18,7 @@ const INITIAL_TEXTS = 90;
 const MAX_FALLING_OBJECTS = 150;
 const HEART_CHANCE = 0.18;
 const SCREEN_SAFE_WIDTH_FACTOR = 0.72;
+const MOBILE_BREAKPOINT = 640;
 const FALL_MIN = 2.0;
 const FALL_MAX = 4.8;
 const RAIN_TOP = 30;
@@ -86,6 +87,21 @@ scene.add(keyLight);
 const rimLight = new THREE.PointLight(0x005dff, 46, 38, 2);
 rimLight.position.set(-8, 5, -10);
 scene.add(rimLight);
+
+function getResponsiveSettings() {
+  const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+
+  return {
+    maxObjects: isMobile ? 95 : MAX_FALLING_OBJECTS,
+    spawnBatch: isMobile ? 1 : SPAWN_BATCH,
+    initialObjects: isMobile ? 55 : INITIAL_TEXTS,
+    safeWidthFactor: isMobile ? 0.46 : SCREEN_SAFE_WIDTH_FACTOR,
+    textScaleMin: isMobile ? 0.18 : 0.34,
+    textScaleMax: isMobile ? 0.46 : 0.96,
+    heartScaleMin: isMobile ? 0.34 : 0.7,
+    heartScaleMax: isMobile ? 0.88 : 1.65
+  };
+}
 
 // "Mặt sàn" rất nhẹ để tăng cảm giác chiều sâu
 const grid = new THREE.GridHelper(42, 42, 0x247cff, 0x09215c);
@@ -296,15 +312,16 @@ function makeHeartMaterial() {
 }
 
 function getRainBounds(depth) {
+  const settings = getResponsiveSettings();
   const aspect = window.innerWidth / window.innerHeight;
-  const width = THREE.MathUtils.mapLinear(depth, -30, 12, 34, 18) * Math.max(1, aspect * 0.78) * SCREEN_SAFE_WIDTH_FACTOR;
+  const width = THREE.MathUtils.mapLinear(depth, -30, 12, 34, 18) * Math.max(1, aspect * 0.78) * settings.safeWidthFactor;
   const height = RAIN_TOP - RAIN_BOTTOM;
 
   return { width, height };
 }
 
 function placeFallingObject(mesh, scaleMin, scaleMax) {
-  if (fallingObjects.length >= MAX_FALLING_OBJECTS) return false;
+  if (fallingObjects.length >= getResponsiveSettings().maxObjects) return false;
 
   const depth = THREE.MathUtils.randFloat(-30, 12);
   const { width } = getRainBounds(depth);
@@ -338,15 +355,17 @@ function placeFallingObject(mesh, scaleMin, scaleMax) {
 }
 
 function spawnLoveText() {
+  const settings = getResponsiveSettings();
   const mesh = new THREE.Mesh(baseGeometry, makeTextMaterial());
-  if (!placeFallingObject(mesh, 0.34, 0.96)) {
+  if (!placeFallingObject(mesh, settings.textScaleMin, settings.textScaleMax)) {
     mesh.material.dispose();
   }
 }
 
 function spawnHeart() {
+  const settings = getResponsiveSettings();
   const mesh = new THREE.Mesh(heartGeometry, makeHeartMaterial());
-  if (!placeFallingObject(mesh, 0.7, 1.65)) {
+  if (!placeFallingObject(mesh, settings.heartScaleMin, settings.heartScaleMax)) {
     mesh.material.dispose();
   }
 }
@@ -367,7 +386,7 @@ function removeFallingObject(index) {
 }
 
 // Tạo sẵn vài chữ để vừa mở đã có hiệu ứng
-for (let i = 0; i < INITIAL_TEXTS; i++) {
+for (let i = 0; i < getResponsiveSettings().initialObjects; i++) {
   spawnFallingObject();
   const mesh = fallingObjects[fallingObjects.length - 1];
   const { height } = getRainBounds(mesh.position.z);
@@ -383,7 +402,7 @@ function animate(time) {
   const elapsed = clock.elapsedTime;
 
   if (time - lastSpawn >= SPAWN_EVERY_MS) {
-    for (let i = 0; i < SPAWN_BATCH; i++) {
+    for (let i = 0; i < getResponsiveSettings().spawnBatch; i++) {
       spawnFallingObject();
     }
     lastSpawn = time;
